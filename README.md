@@ -34,3 +34,18 @@ npm run build
 ```
 
 Now you can find your production build in the `dist` folder.
+
+
+## Windows Gotcha
+
+It appears that, on windows, the node "spawnSync" commands do no behave in exactly the same way as unix systems. It may be, that in ´vite.config.js´ you need to replace the runMillCommand with;
+
+´´´
+function runMillCommand(command) {
+  const option = { shell: true }
+  const result = spawnSync("mill", ["--no-server", "show", command], option );
+  //console.log(result.stdout.toString("utf-8"))
+  return JSON.parse(result.stdout.toString("utf-8"));
+}
+´´´ 
+In order, for the mill <-> vite interactions to correctly alias the locations of the js files
